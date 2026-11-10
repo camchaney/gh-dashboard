@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>GitHub Dashboard</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <!-- ============ Main view: pinned repos ============ -->
+  <section id="view-main" class="view">
+    <header class="bar">
+      <h1>Pinned repos</h1>
+      <div class="bar-actions">
+        <button id="btn-edit" class="btn ghost" title="Edit / reorder">Edit</button>
+        <button id="btn-add" class="btn primary" title="Add repos">+ Add</button>
+        <button id="btn-settings" class="icon-btn" title="Settings" aria-label="Settings">⚙</button>
+      </div>
+    </header>
+    <ul id="pinned-list" class="repo-list"></ul>
+    <div id="pinned-empty" class="empty hidden">
+      <p>No pinned repos yet.</p>
+      <button class="btn primary" id="btn-add-empty">Add your first repo</button>
+    </div>
+  </section>
+
+  <!-- ============ Add view ============ -->
+  <section id="view-add" class="view hidden">
+    <header class="bar">
+      <button class="icon-btn back" data-back aria-label="Back">←</button>
+      <h1>Add repos</h1>
+      <button id="btn-refresh" class="icon-btn" title="Refresh lists" aria-label="Refresh">↻</button>
+    </header>
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="mine" role="tab">My repos</button>
+      <button class="tab" data-tab="contrib" role="tab">Contributed</button>
+      <button class="tab" data-tab="search" role="tab">Search</button>
+    </nav>
+    <div class="search-wrap">
+      <input id="add-query" type="search" placeholder="Filter…" autocomplete="off" spellcheck="false">
+    </div>
+    <div id="direct-add" class="hidden"></div>
+    <div id="add-status" class="status hidden"></div>
+    <ul id="add-list" class="repo-list"></ul>
+  </section>
+
+  <!-- ============ Account view ============ -->
+  <section id="view-settings" class="view hidden">
+    <header class="bar">
+      <button class="icon-btn back" data-back aria-label="Back">←</button>
+      <h1>Account</h1>
+      <span></span>
+    </header>
+    <div class="settings">
+      <!-- Signed in -->
+      <div id="acct-in" class="acct hidden">
+        <div class="who">
+          <img id="acct-avatar" class="who-avatar" alt="">
+          <div>
+            <div>Signed in as <strong id="acct-login"></strong></div>
+            <div class="hint" id="acct-method"></div>
+          </div>
+        </div>
+        <button id="btn-signout" class="btn ghost">Sign out</button>
+      </div>
+
+      <!-- One-time setup: no OAuth client ID yet -->
+      <div id="acct-setup" class="acct hidden">
+        <p><strong>One-time setup</strong></p>
+        <ol class="steps">
+          <li><a href="https://github.com/settings/applications/new" target="_blank" rel="noopener">Register a GitHub OAuth App</a>. Any name works. For both URL fields, use <code>https://github.com</code>.</li>
+          <li>On the app’s page, tick <strong>Enable Device Flow</strong> and click <strong>Update application</strong>.</li>
+          <li>Paste the app’s <strong>Client ID</strong> here:</li>
+        </ol>
+        <input id="client-id-input" type="search" placeholder="Ov23li… or Iv1.…" autocomplete="off" spellcheck="false">
+        <button id="btn-save-client-id" class="btn primary">Save &amp; continue</button>
+      </div>
+
+      <!-- Signed out -->
+      <div id="acct-out" class="acct hidden">
+        <p class="hint">Sign in to see your repos and the repos you’ve contributed to. Signing in also raises the search rate limit.</p>
+        <button id="btn-signin" class="btn primary big">Sign in with GitHub</button>
+        <a id="btn-change-client-id" class="hint link">Change OAuth Client ID</a>
+      </div>
+
+      <!-- Device code waiting -->
+      <div id="acct-pending" class="acct hidden">
+        <p class="hint">Enter this code on GitHub to finish signing in:</p>
+        <div id="device-code" class="device-code"></div>
+        <button id="btn-open-device" class="btn primary big">Copy code &amp; open GitHub</button>
+        <p class="hint">Waiting for you to approve… You can close this popup. Sign-in finishes in the background.</p>
+        <button id="btn-cancel-signin" class="btn ghost">Cancel</button>
+      </div>
+
+      <div id="acct-status" class="status hidden"></div>
+
+      <details id="pat-details" class="advanced">
+        <summary>Use a personal access token instead</summary>
+        <input id="token-input" type="password" placeholder="ghp_… or github_pat_…" autocomplete="off" spellcheck="false">
+        <p class="hint">
+          Create one at <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">github.com/settings/tokens</a>.
+          The token is stored only on this device.
+        </p>
+        <button id="btn-save-token" class="btn">Save token</button>
+      </details>
+    </div>
+  </section>
+
+  <script src="config.js"></script>
+  <script src="auth.js"></script>
+  <script src="github.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
